@@ -30,7 +30,8 @@ function createRequest()
 			catch (failed) 
 			{
 				// navegador não compatível
-				xmlhttp = null;
+				// xmlhttp = null;
+				new ActiveXObject("Microsoft.XMLHTTP");
 			}
 		}
 	}

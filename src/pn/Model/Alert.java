@@ -15,7 +15,7 @@ public class Alert implements InterSCityData {
 	private String text;
 	private String startTimestamp;
 	private String endTimestamp;
-	private List<MyGroup> groups;
+	private List<Integer> groups;
 	
 	/**
 	 * Construtor
@@ -26,7 +26,7 @@ public class Alert implements InterSCityData {
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		this.startTimestamp = sdf.format(new Date());
 		this.endTimestamp = sdf.format(new Date());
-		this.groups = new ArrayList<MyGroup>();
+		this.groups = new ArrayList<Integer>();
 		this.seq = Sequencial.getInstance().getSeq();
 	}
 
@@ -37,7 +37,7 @@ public class Alert implements InterSCityData {
 	 * @param endTimestamp
 	 * @param groups
 	 */
-	public Alert(String text, Date startTimestamp, Date endTimestamp, List<MyGroup> groups) {
+	public Alert(String text, Date startTimestamp, Date endTimestamp, List<Integer> groups) {
 		this.text = text;
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -121,14 +121,14 @@ public class Alert implements InterSCityData {
 	/**
 	 * @return the groups
 	 */
-	public List<MyGroup> getGroups() {
+	public List<Integer> getGroups() {
 		return groups;
 	}
 
 	/**
 	 * @param groups the groups to set
 	 */
-	public void setGroups(List<MyGroup> groups) {
+	public void setGroups(List<Integer> groups) {
 		this.groups = groups;
 	}
 	
@@ -136,7 +136,7 @@ public class Alert implements InterSCityData {
 	 * Assign to a group, without removing previous groups
 	 * @param group the group to add to a group list
 	 */
-	public void addGroup(MyGroup group) {
+	public void addGroup(Integer group) {
 		this.groups.add(group);
 	}
 
@@ -160,15 +160,15 @@ public class Alert implements InterSCityData {
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
-	@Override
-	public String toString() {
-		String s = "Alert [seq=" + seq + ", text=" + text + ", startTimestamp="
-				+ startTimestamp + ", endTimestamp=" + endTimestamp
-				+ ", groups=";
-		for(MyGroup group : groups) {
-			s += group.toString() + ",";
-		}
-		s += "]";
-		return s;
-	}
+//	@Override
+//	public String toString() {
+//		String s = "Alert [seq=" + seq + ", text=" + text + ", startTimestamp="
+//				+ startTimestamp + ", endTimestamp=" + endTimestamp
+//				+ ", groups=";
+//		for(java.lang.Integer group : groups) {
+//			s += group.toString() + ",";
+//		}
+//		s += "]";
+//		return s;
+//	}
 }

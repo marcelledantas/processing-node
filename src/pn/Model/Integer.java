@@ -1,6 +1,6 @@
 package pn.Model;
 
-public class MyGroup extends Group {
+public class Integer extends Group {
 	/**
 	 * serial version due to lac.cnclib.net.groups.Group
 	 */
@@ -8,7 +8,7 @@ public class MyGroup extends Group {
 //	private int group;
 	private double latitude;
 	private double longitude;
-	public MyGroup(int group, double latitude, double longitude) {
+	public Integer(int group, double latitude, double longitude) {
 		super(1, group);
 //		this.group = group;
 		this.latitude = latitude;
@@ -20,8 +20,8 @@ public class MyGroup extends Group {
 	 * @param latitude
 	 * @param longitude
 	 */
-	public MyGroup(String area, String latitude, String longitude) {
-		this(Integer.parseInt(area), Double.parseDouble(latitude), Double.parseDouble(longitude));
+	public Integer(String area, String latitude, String longitude) {
+		this(java.lang.Integer.parseInt(area), Double.parseDouble(latitude), Double.parseDouble(longitude));
 	}
 	/**
 	 * @return the group

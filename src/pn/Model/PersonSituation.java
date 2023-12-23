@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package pn.Model;
 
@@ -14,7 +14,7 @@ public class PersonSituation extends MobileObject {
 	/** this is new person? */
 	private boolean isNewPerson;
 	/** the new groups of this person */
-	private HashSet<Integer> difGroups;
+	private HashSet<java.lang.Integer> difGroups;
 
 	/**
 	 * Constructor
@@ -22,7 +22,7 @@ public class PersonSituation extends MobileObject {
 	 * @param isNewPerson
 	 * @param difGroups
 	 */
-	public PersonSituation(MobileObject mobileObject, Boolean isNewPerson, HashSet<Integer> difGroups) {
+	public PersonSituation(MobileObject mobileObject, Boolean isNewPerson, HashSet<java.lang.Integer> difGroups) {
 		super(mobileObject);
 		this.isNewPerson = isNewPerson;
 		this.difGroups = difGroups;
@@ -31,16 +31,16 @@ public class PersonSituation extends MobileObject {
 	/**
 	 * @return the difGroups
 	 */
-	public HashSet<Integer> getDifGroups() {
+	public HashSet<java.lang.Integer> getDifGroups() {
 		return difGroups;
 	}
-	
+
 	/**
 	 * Adds a group to a difGroup<br>
 	 * A difGroup is a group set with only the new groups<br>
 	 * @param difGroups
 	 */
-	public void addToDifGroups(HashSet<Integer> difGroups) {
+	public void addToDifGroups(HashSet<java.lang.Integer> difGroups) {
 		this.difGroups.addAll(difGroups);
 	}
 
@@ -49,14 +49,14 @@ public class PersonSituation extends MobileObject {
 	 * A difGroup is a group set with only the new groups<br>
 	 * @param areas
 	 */
-	public void addToDifGroups(List<Integer> areas) {
+	public void addToDifGroups(List<java.lang.Integer> areas) {
 		this.difGroups.addAll(areas);
 	}
 
 	/**
 	 * @param difGroups the difGroups to set
 	 */
-	public void setDifGroups(HashSet<Integer> difGroups) {
+	public void setDifGroups(HashSet<java.lang.Integer> difGroups) {
 		this.difGroups = difGroups;
 	}
 

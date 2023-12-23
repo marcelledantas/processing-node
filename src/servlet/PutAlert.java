@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import pn.Model.Alert;
 import pn.Model.Group;
-import pn.Model.MyGroup;
+import pn.Model.Integer;
 import pn.connection.HTTPException;
 import pn.interSCity.InterSCity;
 import pn.util.Debug;
@@ -90,7 +90,7 @@ public class PutAlert extends HttpServlet {
 			Date date;
 			try {
 				date = ((Date) format.parse(alert.getStartTimestamp()));
-				alert.setEndTimestamp(new Date(date.getTime() + Integer.parseInt(request.getParameter("deltaTime"))* 60 * 1000));
+				alert.setEndTimestamp(new Date(date.getTime() + java.lang.Integer.parseInt(request.getParameter("deltaTime"))* 60 * 1000));
 			} catch (ParseException e) {
 				Debug.warning("Wrong date format at date " + alert.getStartTimestamp(), e);
 			}			
@@ -102,7 +102,7 @@ public class PutAlert extends HttpServlet {
 			for(String aux : request.getParameterValues("areas")) {
 				// area, latitude & longitude came in a single HTTP parameter separated by #
 				String[] areaLatLon = aux.split("#");
-				MyGroup group = new MyGroup(areaLatLon[0], areaLatLon[1], areaLatLon[2]);
+				Integer group = new Integer(areaLatLon[0], areaLatLon[1], areaLatLon[2]);
 				alert.addGroup(group);
 			}
 		}

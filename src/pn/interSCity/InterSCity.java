@@ -3,7 +3,7 @@ package pn.interSCity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import pn.Model.Alert;
-import pn.Model.MyGroup;
+import pn.Model.Integer;
 import pn.Model.Person;
 import pn.connection.HTTPConnection;
 import pn.connection.HTTPException;
@@ -12,10 +12,10 @@ import pn.util.Sequencial;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.ArrayList;
 
 /**
  * 
@@ -115,16 +115,38 @@ public class InterSCity {
 		System.out.println("Jsondata" + jsonObject.toString());
 
 		try {
-			response = connection.sendPost("adaptor/resources", jsonObject.toString());
-		} catch (IOException | HTTPException e) {
+			//mocked response
+			response = "{"
+					+ "\"data\": {"
+					+ "\"uuid\": \"45b7d363-86fd-4f81-8681-663140b318d4\","
+					+ "\"description\": \"A city alert\","
+					+ "\"capabilities\": [\"ordem\",\"linha\",\"velocidade\"],"
+					+ "\"status\": \"active\","
+					+ "\"lat\": -23.559616,"
+					+ "\"lon\": -46.731386,"
+					+ "\"country\": \"Brazil\","
+					+ "\"state\": \"São Paulo\","
+					+ "\"city\": \"São Paulo\","
+					+ "\"neighborhood\": \"Butantã\","
+					+ "\"postal_code\": null,"
+					+ "\"created_at\": \"2017-12-27T13:25:07.176Z\","
+					+ "\"updated_at\": \"2017-12-27T13:25:07.176Z\","
+					+ "\"id\": 10"
+					+ "}"
+					+ "}";
+
+			//response = connection.sendPost("catalog/resources", jsonObject.toString());
+
+		} catch (Exception e) {
 			Debug.error("resource not created", e);
 			throw new Exception(e.getMessage());
 		}
+
 		jsonObject = new JSONObject(response);
 		uuid = jsonObject.getJSONObject("data").getString("uuid");
-			
+
 		if(uuid == null) {
-			Debug.warning("Null UUID for " + data.toString());
+			Debug.warning("Null UUID for " + jsonObject.toString());
 		}
 		return uuid;
 	}
@@ -195,7 +217,7 @@ public class InterSCity {
 	 * @return UUID String
 	 * @throws Exception 
 	 */
-	public String createNewResource(InterSCityData interSCityData, MyGroup group) throws Exception {
+	public String createNewResource(InterSCityData interSCityData, Integer group) throws Exception {
 		if(interSCityData instanceof Alert) {
 			// create a new Alert
 			return createNewResource("An alert", "city_alerting", group.getLatitude(), group.getLongitude());
@@ -229,7 +251,7 @@ public class InterSCity {
 		if(interSCityData instanceof Alert) {
 			Alert alert = (Alert) interSCityData;
 			JSONArray cityAlerting = new JSONArray();
-			for(MyGroup group : alert.getGroups()) {
+			for(Integer group : alert.getGroups()) {
 				uuid = createNewResource(interSCityData, group);
 				if(uuid == null) {
 					Debug.warning("Resource alert not created");
@@ -272,11 +294,11 @@ public class InterSCity {
 			jsonObject.put("data", data);
 			String jsonString = jsonObject.toString(2).replace("[[", "[").replace("]]", "]");
 //			connection = new HTTPConnection();
-			try {
-				response = connection.sendPost("adaptor/resources/" + uuid + "/data", jsonString);
-			} catch (IOException | HTTPException e) {
-				Debug.warning("Could not update resource\n" + jsonString, e) ;
-			}
+//			try {
+//				response = connection.sendPost("adaptor/resources/" + uuid + "/data", jsonString);
+//			} catch (IOException | HTTPException e) {
+//				Debug.warning("Could not update resource\n" + jsonString, e) ;
+//			}
 		}
 		else if(interSCityData instanceof Person) {
 			// TODO InterSCity received an instance of PERSON! Do something (I don't know what to do by now!!!)
@@ -284,10 +306,6 @@ public class InterSCity {
 	}
 
 
-
-	
-	
-	
 	/**
 	 * Checks the InterSCity:<br>
 	 * <ul>
@@ -312,7 +330,19 @@ public class InterSCity {
 		// check for the existence of the city_alerting capability
 		//connection = new HTTPConnection();
 		try {
-			response = connection.sendGet("http://cidadesinteligentes.lsdi.ufma.br/interscity/pucrio/catalog/capabilities", "");
+			response = "{"
+					+ "\"name\": \"city_alerting\","
+					+ "\"description\": \"City alert\","
+					+ "\"capability_type\": \"sensor\","
+					+ "\"capabilities\": ["
+					+ "{\"name\": \"ordem\"},"
+					+ "{\"name\": \"linha\"},"
+					+ "{\"name\": \"velocidade\"}"
+					+ "]"
+					+ "}";
+
+//			response = connection.sendGet("catalog/capabilities", "");
+
 		} catch (Exception e) {
 			Debug.warning("Error while checking InterSCity at " + connection.getIpAddress() + " connection (is it up?)", e);
 			return;
@@ -320,8 +350,14 @@ public class InterSCity {
 		
 		if(response == null) return;
 		
-		JSONArray capabilities = new JSONObject(response).getJSONArray("capabilities");
-		
+		JSONArray capabilities = new JSONObject(response).getJSONArray("capabilities");;
+//		try {
+//			 capabilities = new JSONObject(response).getJSONArray("capabilities");
+//		} catch (JSONException e) {
+//			Debug.warning("Error while parsing the JSON response", e);
+//			return;
+//		}
+
 		// check for alert capability
 		found = false;
 		for(int i=0; i<capabilities.length(); i++) {
@@ -335,7 +371,7 @@ public class InterSCity {
 			Debug.info("Capability alert not found, creating one");
 			String jsonString = "{ \"name\": \"city_alerting\", \"description\": \"City alert\", \"capability_type\": \"sensor\" }";
 			Debug.warning("jsonString = " + jsonString);
-			response = connection.sendPost("catalog/capabilities", jsonString);
+//			response = connection.sendPost("catalog/capabilities", jsonString);
 		}
 		else {
 			Debug.info("Capability alert found!");
@@ -353,7 +389,7 @@ public class InterSCity {
 			// person capability not found, need to be created now!
 			Debug.info("Capability person not found, creating one");
 			String data = "{ \"name\": \"person\", \"description\": \"Person\", \"capability_type\": \"sensor\" }";
-			response = connection.sendPost("catalog/capabilities", data);
+//			response = connection.sendPost("catalog/capabilities", data);
 		}
 		else {
 			Debug.info("Capability person found!");
@@ -371,7 +407,7 @@ public class InterSCity {
 			// alertListener capability not found, need to be created now!
 			Debug.info("Capability alertListener not found, creating one");
 			String data = "{ \"name\": \"alertListener\", \"description\": \"alertListener\", \"capability_type\": \"actuator\" }";
-			response = connection.sendPost("catalog/capabilities", data);
+//			response = connection.sendPost("catalog/capabilities", data);
 		}
 		else {
 			Debug.info("Capability alertListener found!");
@@ -389,7 +425,7 @@ public class InterSCity {
 			// fake capability not found, need to be created now!
 			Debug.info("Capability fake not found, creating one");
 			String data = "{ \"name\": \"fake\", \"description\": \"fake capability (workaround)\", \"capability_type\": \"actuator\" }";
-			response = connection.sendPost("catalog/capabilities", data);
+//			response = connection.sendPost("catalog/capabilities", data);
 		}
 		else {
 			Debug.info("Capability fake found!");
@@ -409,10 +445,10 @@ public class InterSCity {
 	 * @param groups
 	 * @return
 	 */
-	public List<Alert> getAlertListByArea(HashSet<Integer> groups) {
+	public List<Alert> getAlertListByArea(HashSet<java.lang.Integer> groups) {
 		// no areas => nothing to do, just return
 		if(groups == null || groups.size() == 0) return null;
-		List<Integer> areas = new ArrayList<Integer>();
+		List<java.lang.Integer> areas = new ArrayList<java.lang.Integer>();
 		for(int area : groups) {
 			areas.add(area);
 		}
@@ -423,7 +459,7 @@ public class InterSCity {
 	 * @param areas area List
 	 * @return an Alert List
 	 */
-	public List<Alert> getAlertListByArea(List<Integer> areas) {
+	public List<Alert> getAlertListByArea(List<java.lang.Integer> areas) {
 		// no areas => nothing to do, just return
 		if(areas == null || areas.size() == 0) return null;
 
@@ -465,13 +501,34 @@ public class InterSCity {
 		 *     ]
 		 * }
 		 */
+
 		try {
 			Debug.info("Getting sensors using discovery/resources?" + qs);
-			response = connection.sendGet("discovery/resources", qs);
+//			response = connection.sendGet("discovery/resources", qs);
+			// Mocking the response
+			response = "{"
+					+ "\"resources\": ["
+					+ "{"
+					+ "\"uuid\": \"12a36493-eddc-4fd6-bc3f-903f4458e2a3\","
+					+ "\"capabilities\": {"
+					+ "\"city_alerting\": ["
+					+ "{"
+					+ "\"text\": \"Olá Mobile Node!\","
+					+ "\"endTimestamp\": \"Sun Mar 31 14:02:00 BRT 2019\","
+					+ "\"seq\": 6,"
+					+ "\"group\":20,"
+					+ "\"date\": \"2019-03-15T19:10:24.809Z\""
+					+ "}"
+					+ "]"
+					+ "}"
+					+ "}"
+					+ "]"
+					+ "}";
 		} catch (Exception e) {
 			Debug.warning("Could not get resources by area: ", e);
 			return null;
 		}
+
 
 		/*
 		 * This is an example of response:
@@ -494,19 +551,26 @@ public class InterSCity {
 		 *     ]
 		 * }
 		 */
-		JSONArray jsonResources = new JSONObject(response).getJSONArray("resources");
+		JSONObject jsonResources = new JSONObject(response).getJSONArray("resources").getJSONObject(0);
 		Debug.info("There are " + jsonResources.length() + " resources with alert for this user\nbecause the answer was " + response);
-
+		List<Integer> groupList = new ArrayList<>();
 		for(int i=0; i< jsonResources.length(); i++) {
-			JSONObject jsonResource = getResourceDataByUUID(jsonResources.getJSONObject(i).getString("uuid"));
+//			JSONObject jsonResource = getResourceDataByUUID(jsonResources.getJSONObject(i).getString("uuid"));
 			Alert alert = new Alert();
 			try {
 				// this came from the previous query
-				alert.setStartTimestamp(jsonResources.getJSONObject(i).getString("updated_at"));
+//				alert.setStartTimestamp(jsonResources.getJSONObject(i).getString("updated_at"));
 				// and these came from this query
-				JSONArray resources = jsonResource.getJSONArray("resources");
-				alert.setEndTimestamp(resources.getJSONObject(0).getJSONObject("capabilities").getJSONArray("city_alerting").getJSONObject(0).getString("endTimestamp"));
-				alert.setText(resources.getJSONObject(0).getJSONObject("capabilities").getJSONArray("city_alerting").getJSONObject(0).getString("text"));
+//				JSONArray resources = jsonResources.getJSONArray("resources");
+				alert.setEndTimestamp(jsonResources.getJSONObject("capabilities").getJSONArray("city_alerting").getJSONObject(0).getString("endTimestamp"));
+				alert.setText(jsonResources.getJSONObject("capabilities").getJSONArray("city_alerting").getJSONObject(0).getString("text"));
+				int group = jsonResources // get the first object in the resources array
+						.getJSONObject("capabilities")
+						.getJSONArray("city_alerting")
+						.getJSONObject(0)
+						.getInt("group");
+				groupList.add(new Integer(group, 10,10));
+				alert.setGroups(groupList);
 				alerts.add(alert);
 			} catch (Exception e) {
 				Debug.warning("Unknown error (I do NOT know how to react to it)", e);
@@ -516,21 +580,37 @@ public class InterSCity {
 		return alerts;
 	}
 	
-	/**
+	/** Mock
 	 * Returns the resource data by UUID
 	 * @param uuid
 	 * @return the resource data in JSON format or null in case of error
 	 */
 	private JSONObject getResourceDataByUUID(String uuid) {
-		JSONObject response;
+		JSONObject response = new JSONObject();
 		try {
-			response = new JSONObject(connection.sendGet("collector/resources/" + uuid + "/data", ""));
+			response.put("uuid", uuid);
 		} catch (Exception e) {
 			Debug.warning("Could not get resource data by UUID " + uuid, e);
 			return null;
 		}
 		return response;
 	}
+
+	/**
+	 * Returns the resource data by UUID
+	 * @param uuid
+	 * @return the resource data in JSON format or null in case of error
+	 */
+//	private JSONObject getResourceDataByUUID(String uuid) {
+//		JSONObject response;
+//		try {
+//			response = new JSONObject(connection.sendGet("collector/resources/" + uuid + "/data", ""));
+//		} catch (Exception e) {
+//			Debug.warning("Could not get resource data by UUID " + uuid, e);
+//			return null;
+//		}
+//		return response;
+//	}
 
 	/**
 	 * Subscribe to receive actuation commands<br>
@@ -554,7 +634,7 @@ public class InterSCity {
 		
 		// subscribe
 //		HTTPConnection connection = new HTTPConnection();
-		connection.sendPost("adaptor/subscriptions", jsonObject.toString());
+		//connection.sendPost("adaptor/subscriptions", jsonObject.toString()); TODO: original descomentado
 	}
 	public void sendActuatorCommand(String capability, String[] commands) throws MalformedURLException, IOException, HTTPException {
 		/*
@@ -588,7 +668,7 @@ public class InterSCity {
 		jsonObject.put("data", data);
 		
 //		HTTPConnection connection = new HTTPConnection();
-		connection.sendPost("actuator/commands", jsonObject.toString());
+//		connection.sendPost("actuator/commands", jsonObject.toString()); TODO: original descomentado
 	}
 	
 	/**
@@ -600,8 +680,29 @@ public class InterSCity {
 	 */
 	public String[] alertListenerDiscover(double lat, double lon) throws Exception {
 		String response;
-		response = connection.sendGet("discovery/resources", "capability=alertListener&lat=" + lat + "&lon=" + lon);
+//		response = connection.sendGet("discovery/resources", "capability=alertListener&lat=" + lat + "&lon=" + lon); //TODO: Como estava antes
 //		response = connection.sendGet("discovery/resources", "capability=alertListener");
+		response = "{"
+				+ "\"resources\": ["
+				+ "{"
+				+ "\"uuid\": \"45b7d363-86fd-4f81-8681-663140b318d4\","
+				+ "\"description\": \"A public bus\","
+				+ "\"capabilities\": [\"temperature\",\"humidity\",\"illuminate\"],"
+				+ "\"status\": \"active\","
+				+ "\"lat\": -23.559616,"
+				+ "\"lon\": -46.731386,"
+				+ "\"country\": \"Brazil\","
+				+ "\"state\": \"São Paulo\","
+				+ "\"city\": \"São Paulo\","
+				+ "\"neighborhood\": \"Butantã\","
+				+ "\"postal_code\": null,"
+				+ "\"created_at\": \"2023-10-27T21:58:43.750Z\","
+				+ "\"updated_at\": \"2023-10-27T21:58:43.750Z\","
+				+ "\"id\": 10"
+				+ "}"
+				+ "]"
+				+ "}";
+
 		JSONArray jsonResources = (new JSONObject(response)).getJSONArray("resources");
 		List<String> uuids = new ArrayList<String>();
 		

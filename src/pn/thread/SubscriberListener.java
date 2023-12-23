@@ -75,8 +75,8 @@ public class SubscriberListener extends Thread {
 		while (true) {
 			try {
 				// wait for a new alert
-				Socket client = server.accept();
-				Debug.info("Publisher connected at " + client.getInetAddress().getHostAddress());
+//				Socket client = server.accept();
+//				Debug.info("Publisher connected at " + client.getInetAddress().getHostAddress());
 				/*
 				 * read the published text
 				 * data should be a JSON text like this:
@@ -86,18 +86,29 @@ public class SubscriberListener extends Thread {
 				 *     {
 				 *       "uuid": "b0ae6f76-521d-4199-9595-f52c99361052",
 				 *       "capabilities": {
-				 *         "alertListener": [<area list>]
+				 *         "alertListener": [48]
 				 *       }
 				 *     }
 				 *   ]
 				 * }
 				 */
-				Scanner scanner = new Scanner(client.getInputStream());
-				String jsonText = "";
-				while(scanner.hasNextLine()) {
-					jsonText += scanner.nextLine();
-				}
-				scanner.close();
+//				Scanner scanner = new Scanner(client.getInputStream());
+
+				String jsonText =
+						"{\n" +
+								"  \"data\": [\n" +
+								"    {\n" +
+								"      \"uuid\": \"b0ae6f76-521d-4199-9595-f52c99361052\",\n" +
+								"      \"capabilities\": {\n" +
+								"        \"alertListerner\": [20]\n" +
+								"      }\n" +
+								"    }\n" +
+								"  ]\n" +
+								"}";;
+//				while(scanner.hasNextLine()) {
+//					jsonText += scanner.nextLine();
+//				}
+//				scanner.close();
 				JSONObject jsonObject = new JSONObject(jsonText);
 				JSONArray alertAreas = jsonObject.getJSONArray("data").getJSONObject(0).getJSONObject("capabilities").getJSONArray("alertListerner");
 				List<Integer> areas = new ArrayList<Integer>();
@@ -106,13 +117,13 @@ public class SubscriberListener extends Thread {
 				}
 				// TODO testar se conseguiu enviar o alerta
 				List<Alert> alerts = interSCity.getAlertListByArea(areas);
-//				// send alert to everybody connected
+				// send alert to everybody connected
 				for(Alert alert : alerts) {
 					MyProcessingNode connection = new MyProcessingNode(StaticLibrary.contextNetIPAddress);
 					connection.sendGroupcastMessage(alert.getGroups(), alert.getText());
 				}
 
-				client.close();
+//				client.close();
 			} catch (IOException e) {
 				Debug.error("Could not start listening", e);
 			} catch (Exception e) {

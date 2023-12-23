@@ -5,17 +5,12 @@ import ckafka.data.SwapData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import main.java.application.ModelApplication;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import pn.Model.MyGroup;
-import pn.interSCity.InterSCityData;
+import pn.Model.Integer;
 import pn.thread.ReceiveData;
 import pn.thread.SubscriberListener;
 import pn.util.Debug;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MyProcessingNode extends ModelApplication {
     private Swap swap;
@@ -35,7 +30,7 @@ public class MyProcessingNode extends ModelApplication {
         System.out.println(String.format("Mensagem recebida de %s", consumerRecord.key()));
         try {
             SwapData data = swap.SwapDataDeserialization((byte[]) consumerRecord.value());
-//            String text = new String(data.getMessage(), StandardCharsets.UTF_8);
+//           //            String text = new String(data.getMessage(), StandardCharsets.UTF_8);
 //            System.out.println("Mensagem recebida = " + text);
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,10 +59,10 @@ public class MyProcessingNode extends ModelApplication {
         }
     }
 
-    public void sendGroupcastMessage(List<MyGroup> groups, String text) {
+    public void sendGroupcastMessage(List<Integer> groups, String text) {
         System.out.println("Groupcast messager: sendGroupcastMessage\n");
 
-        for(MyGroup group : groups){
+        for(Integer group : groups){
             System.out.println(String.format("Sending |%s| to group %s.", text, group.getGroup()));
             try {
                 sendRecord(createRecord("GroupMessageTopic", String.valueOf(group.getGroup()),

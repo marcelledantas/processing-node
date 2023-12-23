@@ -72,7 +72,7 @@ function getAreas() {
 	var xmlhttp = createRequest();
 	if(xmlhttp == null) {
 		alert("Browser not compatible with AJAX!");
-		return;
+		return;HH
 	}
 	xmlhttp.open("get", "GetRegion", true);
 	xmlhttp.onreadystatechange = function() {

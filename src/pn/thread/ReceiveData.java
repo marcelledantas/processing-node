@@ -33,7 +33,7 @@ public class ReceiveData extends Thread {
 	public void run() {
 		Object data;
 		List<Alert> alerts = new ArrayList<Alert>();
-		
+
 		while(true) {
 			while(MyProcessingNodeMain.dataToPNQueue.isEmpty()) {
 				synchronized (MyProcessingNodeMain.dataToPNQueue) {
