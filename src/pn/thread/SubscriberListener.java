@@ -3,6 +3,7 @@
  */
 package pn.thread;
 
+import jdk.swing.interop.SwingInterOpUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import pn.Model.Alert;
@@ -37,32 +38,32 @@ public class SubscriberListener extends Thread {
 		String ip = null;
 		String uuid;
 		String[] uuids;
-		
+		this.interSCity = new InterSCity();
 		// get the local IP address to subscribe to receive actuation commands (information about new messages)
-		try (final DatagramSocket socket = new DatagramSocket()) {
-			socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
-			ip = socket.getLocalAddress().getHostAddress();
-		} catch (SocketException | UnknownHostException e) {
-			throw(e);
-		}
+//		try (final DatagramSocket socket = new DatagramSocket()) {
+//			socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+//			ip = socket.getLocalAddress().getHostAddress();
+//		} catch (SocketException | UnknownHostException e) {
+//			throw(e);
+//		}
 		
-		server = new ServerSocket(0);
+/*		server = new ServerSocket(0);
 		// TODO testar se conseguiu subscrever (subscribe)
 		this.interSCity = new InterSCity(interSCityIPAddress);
 		uuids = interSCity.alertListenerDiscover(-23.559616, -46.731386);
-		if(uuids == null || uuids.length == 0) {
+		if(uuids == null || uuids.length == 0) {*/
 			Debug.info("creating a new alert listener");
-			uuid = interSCity.createNewResource("A city alert listener", "alertListener", -23.559616, -46.731386);
+//			uuid = interSCity.createNewResource("A city alert listener", "alertListener", -23.559616, -46.731386);
 			// put the new UUID into the UUIDs array
 			// the problem is: the UUIDs is an array and as an array, elements cannot be added, so I create an new array based on a List
-			List<String> listUUIDS = new ArrayList<String>();
-			listUUIDS.add(uuid);
-			uuids = listUUIDS.toArray(uuids);
-		}
-		uuid = uuids[0];
-		interSCity.subscribe(uuid, new String[]{"alertListener"}, "http://" + ip + ":" + server.getLocalPort());
+//			List<String> listUUIDS = new ArrayList<String>();
+//			listUUIDS.add(uuid);
+//			uuids = listUUIDS.toArray(uuids);
+//		}
+//		uuid = uuids[0];
+//		interSCity.subscribe(uuid, new String[]{"alertListener"}, "http://" + ip + ":" + server.getLocalPort());
 
-		Debug.info("Listening at " + ip + ":" + server.getLocalPort());
+//		Debug.info("Listening at " + ip + ":" + server.getLocalPort());
 	}
 
 	/**
@@ -72,6 +73,7 @@ public class SubscriberListener extends Thread {
 	@Override
 	public void run() {
 //		InterSCity interSCity = new InterSCity();
+		System.out.println("ENTROU SUBSCRIBER");
 		while (true) {
 			try {
 				// wait for a new alert
@@ -100,7 +102,7 @@ public class SubscriberListener extends Thread {
 								"    {\n" +
 								"      \"uuid\": \"b0ae6f76-521d-4199-9595-f52c99361052\",\n" +
 								"      \"capabilities\": {\n" +
-								"        \"alertListerner\": [20]\n" +
+								"        \"alertListerner\": [83]\n" +
 								"      }\n" +
 								"    }\n" +
 								"  ]\n" +

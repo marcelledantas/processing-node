@@ -41,7 +41,11 @@ public class InterSCity {
 	 * @throws Exception 
 	 */
 	public InterSCity(String interSCityIPAddress) throws Exception {
-		this(new HTTPConnection(interSCityIPAddress));
+//		this(new HTTPConnection(interSCityIPAddress));
+	}
+
+	public InterSCity(){
+
 	}
 	
 	/**
@@ -516,7 +520,7 @@ public class InterSCity {
 					+ "\"text\": \"Olá Mobile Node!\","
 					+ "\"endTimestamp\": \"Sun Mar 31 14:02:00 BRT 2019\","
 					+ "\"seq\": 6,"
-					+ "\"group\":20,"
+					+ "\"group\":83,"
 					+ "\"date\": \"2019-03-15T19:10:24.809Z\""
 					+ "}"
 					+ "]"

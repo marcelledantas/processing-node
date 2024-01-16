@@ -17,7 +17,7 @@
   <context-param>
   	<description>Working directory</description>
   	<param-name>workDir</param-name>
-  	<param-value>/Users/imarc/IdeaProjects/region-alert-v3.0/group-definer/</param-value>
+  	<param-value>/Users/imarc/IdeaProjects/region-alert-v3.0/processing-node/</param-value>
   </context-param>
   <context-param>
   	<description>Group description filename</description>

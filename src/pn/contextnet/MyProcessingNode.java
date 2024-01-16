@@ -19,7 +19,7 @@ public class MyProcessingNode extends ModelApplication {
     /**
      * Constructor
      */
-    public MyProcessingNode() throws Exception {
+    public MyProcessingNode(){
         this.objectMapper = new ObjectMapper();
         this.swap = new Swap(objectMapper);
     }
@@ -44,6 +44,8 @@ public class MyProcessingNode extends ModelApplication {
      */
     public MyProcessingNode(String interSCityIPAddress) throws Exception {
         this();
+//        this.objectMapper = new ObjectMapper();
+//        this.swap = new Swap(objectMapper);
 
         // a thread to receive data from ContextNet
         Thread receiveData = new ReceiveData(interSCityIPAddress);

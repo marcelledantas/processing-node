@@ -37,10 +37,6 @@ import static pn.util.StaticLibrary.setEnv;
  *
  */
 public class MyProcessingNodeMain {
-	// From: https://stackoverflow.com/questions/56397206/gluon-maps-doesnt-load-the-map-and-throws-an-exception
-	static {
-	    System.setProperty("http.agent", "Gluon Mobile/1.0.3");
-	}
 	/*
 	 * Configuration parameters
 	 */
@@ -193,21 +189,21 @@ public class MyProcessingNodeMain {
 		System.out.println("Ready, set...");
 
 		// check and set InterSCity capabilities
-		try {
-			interSCity = new InterSCity(interSCityIPAddress);
-		}
-		catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			interSCity.checkInterSCity();
-		} catch (IOException e) {
-			Debug.warning("Please, start InterSCity platform using this command:\n"
-					+ "( cd /opt/InterSCity/dev-env ; ./project start )\n", e);
-		} catch (HTTPException e) {
-			throw new RuntimeException(e);
-		}
+//		try {
+//			interSCity = new InterSCity(interSCityIPAddress);
+//		}
+//		catch (Exception e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		try {
+//			interSCity.checkInterSCity();
+//		} catch (IOException e) {
+//			Debug.warning("Please, start InterSCity platform using this command:\n"
+//					+ "( cd /opt/InterSCity/dev-env ; ./project start )\n", e);
+//		} catch (HTTPException e) {
+//			throw new RuntimeException(e);
+//		}
 
 		/*
 		 * Create Processing Node

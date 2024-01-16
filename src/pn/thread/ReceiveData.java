@@ -20,7 +20,7 @@ public class ReceiveData extends Thread {
 
 	public ReceiveData(String interSCityIPAddress) throws Exception {
 		// create a new connection to send message to mobile-hub
-		this.connection = new MyProcessingNode(StaticLibrary.contextNetIPAddress);
+//		this.connection = new MyProcessingNode(StaticLibrary.contextNetIPAddress);
 		this.interSCity = new InterSCity(interSCityIPAddress);
 	}
 
@@ -31,19 +31,20 @@ public class ReceiveData extends Thread {
 	 */
 	@Override
 	public void run() {
+		System.out.println("ENTROOOU");
 		Object data;
 		List<Alert> alerts = new ArrayList<Alert>();
 
 		while(true) {
-			while(MyProcessingNodeMain.dataToPNQueue.isEmpty()) {
-				synchronized (MyProcessingNodeMain.dataToPNQueue) {
-					try {
-						MyProcessingNodeMain.dataToPNQueue.wait();
-					} catch (InterruptedException e) {
-						Debug.warning("Could not wait for dataToPN", e);
-					}
-				}
-			}
+//			while(MyProcessingNodeMain.dataToPNQueue.isEmpty()) {
+//				synchronized (MyProcessingNodeMain.dataToPNQueue) {
+//					try {
+//						MyProcessingNodeMain.dataToPNQueue.wait();
+//					} catch (InterruptedException e) {
+//						Debug.warning("Could not wait for dataToPN", e);
+//					}
+//				}
+//			}
 			// dataToPNQueue is ConcurrentLinkedQueue thread safe linked queue, so, does NOT need to be synchronized
 			while ((data = MyProcessingNodeMain.dataToPNQueue.poll()) != null) {
 				Debug.info("Data received: " + data + " object");
@@ -69,6 +70,7 @@ public class ReceiveData extends Thread {
 						Debug.info("There is " + alerts.size() + " alert(s) for " + personSituation.getId());
 						// send each alert to this person
 						for(Alert alert : alerts) {
+							MyProcessingNode pn = new MyProcessingNode();
 							this.connection.sendMessageToMobileHub(personSituation.getUuid(), alert.getText());
 						}
 					}
