@@ -30,8 +30,6 @@ public class MyProcessingNode extends ModelApplication {
         System.out.println(String.format("Mensagem recebida de %s", consumerRecord.key()));
         try {
             SwapData data = swap.SwapDataDeserialization((byte[]) consumerRecord.value());
-//           //            String text = new String(data.getMessage(), StandardCharsets.UTF_8);
-//            System.out.println("Mensagem recebida = " + text);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -63,7 +61,6 @@ public class MyProcessingNode extends ModelApplication {
 
     public void sendGroupcastMessage(List<Integer> groups, String text) {
         System.out.println("Groupcast messager: sendGroupcastMessage\n");
-
         for(Integer group : groups){
             System.out.println(String.format("Sending |%s| to group %s.", text, group.getGroup()));
             try {
@@ -75,7 +72,7 @@ public class MyProcessingNode extends ModelApplication {
         }
     }
 
-    public void sendMessageToMobileHub(String uuid, String text) {
+    public void sendUnicastMessage(String uuid, String text) {
         System.out.println(String.format("Sending |%s| to %s.", text, uuid));
         try {
             sendRecord(createRecord("PrivateMessageTopic", uuid,

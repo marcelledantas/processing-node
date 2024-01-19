@@ -8,7 +8,6 @@ import pn.dao.UserDAO;
 import pn.interSCity.InterSCity;
 import pn.main.MyProcessingNodeMain;
 import pn.util.Debug;
-import pn.util.StaticLibrary;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -71,7 +70,7 @@ public class ReceiveData extends Thread {
 						// send each alert to this person
 						for(Alert alert : alerts) {
 							MyProcessingNode pn = new MyProcessingNode();
-							this.connection.sendMessageToMobileHub(personSituation.getUuid(), alert.getText());
+							this.connection.sendUnicastMessage(personSituation.getUuid(), alert.getText());
 						}
 					}
 				}
