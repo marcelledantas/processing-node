@@ -520,7 +520,7 @@ public class InterSCity {
 					+ "\"text\": \"Olá Mobile Node!\","
 					+ "\"endTimestamp\": \"Sun Mar 31 14:02:00 BRT 2019\","
 					+ "\"seq\": 6,"
-					+ "\"group\":83,"
+					+ "\"group\":89,"
 					+ "\"date\": \"2019-03-15T19:10:24.809Z\""
 					+ "}"
 					+ "]"

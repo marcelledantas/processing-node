@@ -30,6 +30,8 @@ import java.util.Scanner;
 public class SubscriberListener extends Thread {
 	private ServerSocket server; 
 	private InterSCity interSCity;
+	boolean isFirstIteration = true;
+
 	/**
 	 * Constructor<br>
 	 * @throws Exception when could not create the listener
@@ -74,8 +76,15 @@ public class SubscriberListener extends Thread {
 	public void run() {
 //		InterSCity interSCity = new InterSCity();
 		System.out.println("ENTROU SUBSCRIBER");
+
 		while (true) {
 			try {
+				if (!isFirstIteration) {
+					// Delay for 5 minutes (300,000 milliseconds) after the first iteration
+					Thread.sleep(300000);
+				} else {
+					isFirstIteration = false;
+				}
 				// wait for a new alert
 //				Socket client = server.accept();
 //				Debug.info("Publisher connected at " + client.getInetAddress().getHostAddress());
@@ -102,7 +111,7 @@ public class SubscriberListener extends Thread {
 								"    {\n" +
 								"      \"uuid\": \"b0ae6f76-521d-4199-9595-f52c99361052\",\n" +
 								"      \"capabilities\": {\n" +
-								"        \"alertListerner\": [83]\n" +
+								"        \"alertListerner\": [89]\n" +
 								"      }\n" +
 								"    }\n" +
 								"  ]\n" +

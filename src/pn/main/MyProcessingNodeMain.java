@@ -221,8 +221,8 @@ public class MyProcessingNodeMain {
 		/*
 		 * Create a thread to send user data to the InterSCity
 		 */
-		Thread consumer = new Thread(new InterSCityConsumer(interSCity, mobileObjectQueue));
-		consumer.start();
+//		Thread consumer = new Thread(new InterSCityConsumer(interSCity, mobileObjectQueue));
+//		consumer.start();
 		
 		System.out.println("\nGO!");
 		while(true) {}

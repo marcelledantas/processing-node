@@ -111,7 +111,7 @@ public class PutAlert extends HttpServlet {
 		try {
 			interSCity.updateDB(alert);
 		} catch (Exception e) {
-			Debug.warning("Alert not created", e);
+			Debug.warning(" created", e);
 			responseMessage = "Alert not created. Is InterSCity UP at " + interSCity.getIpAddress() + "?";
 		}
 		
